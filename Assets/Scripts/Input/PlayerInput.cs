@@ -23,7 +23,7 @@ namespace Input
             _playerActions.Gameplay.Control.Disable();
         }
         
-        private void FixedUpdate()
+        private void Update()
         {
             _inputValue = _playerActions.Gameplay.Control.ReadValue<Vector2>();
             Debug.Log(_inputValue);
