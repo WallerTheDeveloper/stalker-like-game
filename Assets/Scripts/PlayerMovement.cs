@@ -24,24 +24,6 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
-    private void Update()
-    {
-        SpeedControl();
-    }
-    private void SpeedControl()
-    {
-        Vector3 rigidbodyVelocity = _rigidbody.velocity;
-        
-        Vector3 flatVel = new Vector3(rigidbodyVelocity.x, 0f, rigidbodyVelocity.z);
-
-        // limit velocity if needed
-        if(flatVel.magnitude > movementSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * movementSpeed;
-            _rigidbody.velocity = new Vector3(limitedVel.x, _rigidbody.velocity.y, limitedVel.z);
-        }
-        
-    }
     private void MovePlayer()
     {
 
