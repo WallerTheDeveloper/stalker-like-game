@@ -21,22 +21,27 @@ public class PlayerMovementController : SerializedMonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         
         _playerInput.OnJumpTriggered += Jump;
+
+        StartCoroutine(DropPlayerOnGround());
+    }
+
+    private IEnumerator DropPlayerOnGround()
+    {
+        _isOnGround = false;
+        
+        _rigidbody.useGravity = true;
+        
+        yield return new WaitUntil(() => _isOnGround);
+        
+        _rigidbody.useGravity = false;
+        
     }
     
     private void FixedUpdate()
     {
         Move();
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
-        {
-            Debug.Log("Collided with ground");
-            _isOnGround = true;
-        }
-    }
-
+    
     private void Move()
     {
         var verticalInput = _playerInput.InputValue.y;
@@ -57,7 +62,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
         _isOnGround = false;
         
         _rigidbody.useGravity = true;
-        _rigidbody.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+        _rigidbody.AddForce(Vector3.up * 30f, ForceMode.Impulse);
         
         StartCoroutine(UseGravityWhileInAir());
         
@@ -65,6 +70,14 @@ public class PlayerMovementController : SerializedMonoBehaviour
         {
             yield return new WaitUntil(() => _isOnGround);
             _rigidbody.useGravity = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+        {
+            _isOnGround = true;
         }
     }
 
