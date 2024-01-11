@@ -30,8 +30,6 @@ public class PlayerMovementController : SerializedMonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // if collides with collider with layer "Ground" then _isInAir = false
-
         if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
         {
             Debug.Log("Collided with ground");
