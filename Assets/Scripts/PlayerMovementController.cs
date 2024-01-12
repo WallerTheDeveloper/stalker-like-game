@@ -26,15 +26,16 @@ public class PlayerMovementController : SerializedMonoBehaviour
     }
 
     private IEnumerator DropPlayerOnGround()
-    {
+    { 
         _isOnGround = false;
         
+        _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
         
         yield return new WaitUntil(() => _isOnGround);
         
         _rigidbody.useGravity = false;
-        
+        _rigidbody.isKinematic = true;
     }
     
     private void FixedUpdate()
@@ -54,13 +55,15 @@ public class PlayerMovementController : SerializedMonoBehaviour
         
         _moveDirection = transform.forward * verticalInput + transform.right * horizontalInput;
         
-        _rigidbody.AddForce(_moveDirection.normalized * movementSpeed, ForceMode.Force);
+        // _rigidbody.AddForce(_moveDirection.normalized * movementSpeed, ForceMode.Force);
+        _rigidbody.MovePosition(_moveDirection.normalized * movementSpeed * Time.fixedDeltaTime + _rigidbody.position);
     }
 
     private void Jump()
     {
         _isOnGround = false;
         
+        _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
         _rigidbody.AddForce(Vector3.up * 30f, ForceMode.Impulse);
         
@@ -70,6 +73,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
         {
             yield return new WaitUntil(() => _isOnGround);
             _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
         }
     }
 
