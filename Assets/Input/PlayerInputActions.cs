@@ -44,6 +44,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""1ae738a4-c8a0-4635-920a-eb4105a1d7f2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""f68b599c-012c-4d1e-b24c-56a115bec507"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""fa05e2b0-4640-4095-a28e-80eeb88d8861"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +139,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c02ef849-564c-4f49-b1a5-f788a1070d7c"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16af36c4-1dca-496e-b654-69ddb009f305"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e12bd21-3060-4ce3-85ab-b92d39852fad"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +182,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Control = m_Gameplay.FindAction("Control", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
+        m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
+        m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
+        m_Gameplay_Crouch = m_Gameplay.FindAction("Crouch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +248,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Control;
     private readonly InputAction m_Gameplay_Jump;
+    private readonly InputAction m_Gameplay_Look;
+    private readonly InputAction m_Gameplay_Run;
+    private readonly InputAction m_Gameplay_Crouch;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
         public GameplayActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Control => m_Wrapper.m_Gameplay_Control;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
+        public InputAction @Look => m_Wrapper.m_Gameplay_Look;
+        public InputAction @Run => m_Wrapper.m_Gameplay_Run;
+        public InputAction @Crouch => m_Wrapper.m_Gameplay_Crouch;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +275,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
+            @Crouch.started += instance.OnCrouch;
+            @Crouch.performed += instance.OnCrouch;
+            @Crouch.canceled += instance.OnCrouch;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -216,6 +294,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
+            @Crouch.started -= instance.OnCrouch;
+            @Crouch.performed -= instance.OnCrouch;
+            @Crouch.canceled -= instance.OnCrouch;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -237,5 +324,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     {
         void OnControl(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
     }
 }
