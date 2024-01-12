@@ -3,11 +3,16 @@ using System.Collections;
 using Input;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerMovementController : SerializedMonoBehaviour
 {
     [SerializeField] private float movementSpeed = 1f;
-
+    [SerializeField] private float mouseSensitivity;
+    [SerializeField] private float maxAngle = 90f;
+    [SerializeField] private Camera firstPersonCamera;
+    
     [field: SerializeField] private IPlayerInput _playerInput;
     
     private Rigidbody _rigidbody;
@@ -15,7 +20,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
     private Vector3 _moveDirection;
 
     private bool _isOnGround = false;
-    
+    private float xRotation = 0f;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -42,23 +47,38 @@ public class PlayerMovementController : SerializedMonoBehaviour
     {
         Move();
     }
-    
+
+    private void Update()
+    {
+        UpdateMouseLook();
+    }
+
     private void Move()
     {
-        var verticalInput = _playerInput.InputValue.y;
-        var horizontalInput = _playerInput.InputValue.x;
+        var verticalInput = _playerInput.MovementInputValue.y;
+        var horizontalInput = _playerInput.MovementInputValue.x;
         
         if (verticalInput == 0 && horizontalInput == 0)
         {
             return;
         }
         
-        _moveDirection = transform.forward * verticalInput + transform.right * horizontalInput;
+        _moveDirection = firstPersonCamera.transform.forward * verticalInput + firstPersonCamera.transform.right * horizontalInput;
         
-        // _rigidbody.AddForce(_moveDirection.normalized * movementSpeed, ForceMode.Force);
-        _rigidbody.MovePosition(_moveDirection.normalized * movementSpeed * Time.fixedDeltaTime + _rigidbody.position);
+        _rigidbody.MovePosition(new Vector3(_moveDirection.x, 0f, _moveDirection.z).normalized * movementSpeed * Time.fixedDeltaTime + _rigidbody.position);
+        
     }
+    
+    private void UpdateMouseLook() 
+    {
+        var rot = firstPersonCamera.transform.localRotation.eulerAngles;
+        float xTo = rot.y + _playerInput.LookInputValue.x;
 
+        xRotation -= _playerInput.LookInputValue.y;
+        xRotation = Mathf.Clamp(xRotation, -maxAngle, maxAngle);
+
+        firstPersonCamera.transform.localRotation = Quaternion.Euler(xRotation, xTo, 0f);
+    }
     private void Jump()
     {
         _isOnGround = false;
