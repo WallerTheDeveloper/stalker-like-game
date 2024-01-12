@@ -28,21 +28,20 @@ public class PlayerMovementController : SerializedMonoBehaviour
         _playerInput.OnJumpTriggered += Jump;
 
         StartCoroutine(DropPlayerOnGround());
+        IEnumerator DropPlayerOnGround()
+        { 
+            _isOnGround = false;
+        
+            _rigidbody.isKinematic = false;
+            _rigidbody.useGravity = true;
+        
+            yield return new WaitUntil(() => _isOnGround);
+        
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+        }
     }
 
-    private IEnumerator DropPlayerOnGround()
-    { 
-        _isOnGround = false;
-        
-        _rigidbody.isKinematic = false;
-        _rigidbody.useGravity = true;
-        
-        yield return new WaitUntil(() => _isOnGround);
-        
-        _rigidbody.useGravity = false;
-        _rigidbody.isKinematic = true;
-    }
-    
     private void FixedUpdate()
     {
         Move();
