@@ -3,16 +3,14 @@ using System.Collections;
 using Input;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerMovementController : SerializedMonoBehaviour
 {
     [SerializeField] private float movementSpeed = 1f;
-    [SerializeField] private float mouseSensitivity;
+    [SerializeField] private Vector2 mouseSensitivity;
     [SerializeField] private float maxAngle = 90f;
     [SerializeField] private Camera firstPersonCamera;
-    
+
     [field: SerializeField] private IPlayerInput _playerInput;
     
     private Rigidbody _rigidbody;
@@ -70,10 +68,12 @@ public class PlayerMovementController : SerializedMonoBehaviour
     
     private void UpdateMouseLook() 
     {
+        var lookInput = _playerInput.LookInputValue * mouseSensitivity;
+        
         var rot = firstPersonCamera.transform.localRotation.eulerAngles;
-        float xTo = rot.y + _playerInput.LookInputValue.x;
+        float xTo = rot.y + lookInput.x;
 
-        xRotation -= _playerInput.LookInputValue.y;
+        xRotation -= lookInput.y;
         xRotation = Mathf.Clamp(xRotation, -maxAngle, maxAngle);
 
         firstPersonCamera.transform.localRotation = Quaternion.Euler(xRotation, xTo, 0f);
