@@ -28,12 +28,11 @@ Transform:
   m_GameObject: {fileID: 1760665001626430846}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1538688546298617181}
-  - {fileID: 2223530589524090531}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7349582230386543469
@@ -44,7 +43,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760665001626430846}
   serializedVersion: 4
-  m_Mass: 50
+  m_Mass: 100
   m_Drag: 6
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -88,8 +87,10 @@ MonoBehaviour:
       Entry: 6
       Data: 
   movementSpeed: 5
-  mouseSensitivity: {x: 0.2, y: 0.2}
+  jumpForce: 1000
+  fallForce: 250
   maxAngle: 90
+  mouseSensitivity: {x: 0.2, y: 0.2}
   firstPersonCamera: {fileID: 17586409664189770}
 --- !u!136 &8711322634267670086
 CapsuleCollider:
@@ -113,38 +114,7 @@ CapsuleCollider:
   m_Radius: 0.37
   m_Height: 2.59
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &4403427239689167169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2223530589524090531}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2223530589524090531
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4403427239689167169}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.96, y: 0, z: -0.739}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3350996379994593622}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &7993356229297096015
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 7993356229297096015}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.85, z: 0}
+  m_LocalPosition: {x: 0, y: 2.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

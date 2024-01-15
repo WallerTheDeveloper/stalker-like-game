@@ -3,14 +3,16 @@ using System.Collections;
 using Input;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerMovementController : SerializedMonoBehaviour
 {
     [SerializeField] private float movementSpeed = 1f;
-    [SerializeField] private Vector2 mouseSensitivity;
+    [SerializeField] private float jumpForce = 1000f;
+    [SerializeField] private float fallForce = 1000f;
     [SerializeField] private float maxAngle = 90f;
+    [SerializeField] private Vector2 mouseSensitivity;
     [SerializeField] private Camera firstPersonCamera;
-
     [field: SerializeField] private IPlayerInput _playerInput;
     
     private Rigidbody _rigidbody;
@@ -19,6 +21,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
 
     private bool _isOnGround = false;
     private float xRotation = 0f;
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -26,6 +29,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
         _playerInput.OnJumpTriggered += Jump;
 
         StartCoroutine(DropPlayerOnGround());
+        
         IEnumerator DropPlayerOnGround()
         { 
             _isOnGround = false;
@@ -34,9 +38,9 @@ public class PlayerMovementController : SerializedMonoBehaviour
             _rigidbody.useGravity = true;
         
             yield return new WaitUntil(() => _isOnGround);
-        
-            _rigidbody.useGravity = false;
+            
             _rigidbody.isKinematic = true;
+            _rigidbody.useGravity = false;
         }
     }
 
@@ -78,6 +82,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
 
         firstPersonCamera.transform.localRotation = Quaternion.Euler(xRotation, xTo, 0f);
     }
+    
     private void Jump()
     {
         if (!_isOnGround)
@@ -85,21 +90,42 @@ public class PlayerMovementController : SerializedMonoBehaviour
             return;
         }
         _isOnGround = false;
-        
+           
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
-        _rigidbody.AddForce(Vector3.up * 30f, ForceMode.Impulse);
-        
-        StartCoroutine(UseGravityWhileInAir());
-        
-        IEnumerator UseGravityWhileInAir()
+        _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+
+        if (_rigidbody.velocity.x == 0f || _rigidbody.velocity.z == 0f)
         {
-            yield return new WaitUntil(() => _isOnGround);
-            _rigidbody.useGravity = false;
-            _rigidbody.isKinematic = true;
+            float PredictMaxJumpHeight(float forceMagnitude, float objectMass)
+            {
+                // Calculate the initial velocity using the impulse-momentum theorem
+                float initialVelocity = forceMagnitude / objectMass;
+
+                // Calculate the maximum height using the formula
+                float maxHeight = (initialVelocity * initialVelocity) / (2 * Physics.gravity.y) * (-1);
+
+                return maxHeight;
+            }
+            
+            var maxHeight = PredictMaxJumpHeight(jumpForce, _rigidbody.mass);
+
+            StartCoroutine(FallOnGround(maxHeight));
+            IEnumerator FallOnGround(float maxHeight)
+            {
+                float initialHeight = _rigidbody.position.y;
+                float currentHeight = transform.position.y - initialHeight;
+
+                while (currentHeight < maxHeight)
+                {
+                    currentHeight = transform.position.y - initialHeight;
+                    _rigidbody.AddForce((fallForce / 8) * Vector2.down, ForceMode.Force);
+                    yield return null;
+                }
+            }
         }
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
