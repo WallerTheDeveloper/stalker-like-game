@@ -80,6 +80,10 @@ public class PlayerMovementController : SerializedMonoBehaviour
     }
     private void Jump()
     {
+        if (!_isOnGround)
+        {
+            return;
+        }
         _isOnGround = false;
         
         _rigidbody.isKinematic = false;
