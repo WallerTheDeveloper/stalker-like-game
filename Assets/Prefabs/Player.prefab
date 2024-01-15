@@ -88,7 +88,7 @@ MonoBehaviour:
       Data: 
   movementSpeed: 5
   jumpForce: 1000
-  fallForce: 250
+  fallForce: 100
   maxAngle: 90
   mouseSensitivity: {x: 0.2, y: 0.2}
   firstPersonCamera: {fileID: 17586409664189770}

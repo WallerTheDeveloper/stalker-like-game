@@ -119,7 +119,7 @@ public class PlayerMovementController : SerializedMonoBehaviour
                 while (currentHeight < maxHeight)
                 {
                     currentHeight = transform.position.y - initialHeight;
-                    _rigidbody.AddForce((fallForce / 8) * Vector2.down, ForceMode.Force);
+                    _rigidbody.AddForce((fallForce) * Vector2.down, ForceMode.Force);
                     yield return null;
                 }
             }
