@@ -74,18 +74,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38c0cf1ef9cbe0468b3e11da671cf06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _playerInput
-      Entry: 6
-      Data: 
   movementSpeed: 5
   jumpForce: 1000
   fallForce: 100
