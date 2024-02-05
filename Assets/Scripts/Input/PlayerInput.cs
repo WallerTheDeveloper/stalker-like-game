@@ -1,11 +1,12 @@
 ﻿using System;
 using Core;
+using Core.DISystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Input
 {
-    public class PlayerInput : MonoBehaviour, ISystem, IPlayerInput
+    public class PlayerInput : IPlayerInput
     {
         private PlayerInputActions _playerActions;
         
@@ -18,8 +19,8 @@ namespace Input
         public Action OnJumpTriggered { get; set; }
         
         private bool _isJumping = false;
-        public void Register()
-        { 
+        public void Initialize()
+        {
             _playerActions = new PlayerInputActions();
 
             _playerActions.Gameplay.Jump.performed += OnJump;
@@ -27,9 +28,10 @@ namespace Input
             _playerActions.Gameplay.Control.Enable();
             _playerActions.Gameplay.Jump.Enable();
             _playerActions.Gameplay.Look.Enable();
+
         }
 
-        public void Deregister()
+        public void Deinitialize()
         {
             _playerActions.Gameplay.Jump.performed -= OnJump;     
 
@@ -38,7 +40,7 @@ namespace Input
             _playerActions.Gameplay.Look.Disable();
         }
         
-        private void Update()
+        public void Tick()
         {
             _movementInputValue = _playerActions.Gameplay.Control.ReadValue<Vector2>();
             _lookInputValue = _playerActions.Gameplay.Look.ReadValue<Vector2>();
