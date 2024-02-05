@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
+using Core.DISystem;
 using Input;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class PlayerMovementController : SerializedMonoBehaviour
+public class PlayerMovementController : MonoBehaviour, IDependentObject
 {
     [SerializeField] private float movementSpeed = 1f;
     [SerializeField] private float jumpForce = 1000f;
@@ -13,7 +11,8 @@ public class PlayerMovementController : SerializedMonoBehaviour
     [SerializeField] private float maxAngle = 90f;
     [SerializeField] private Vector2 mouseSensitivity;
     [SerializeField] private Camera firstPersonCamera;
-    [field: SerializeField] private IPlayerInput _playerInput;
+   
+    private IPlayerInput _playerInput;
     
     private Rigidbody _rigidbody;
 
@@ -22,12 +21,16 @@ public class PlayerMovementController : SerializedMonoBehaviour
     private bool _isOnGround = false;
     private float xRotation = 0f;
 
-    private void Start()
+    public void InjectDependencies(IDependencyContainer dependencyContainer)
+    {
+        _playerInput ??= dependencyContainer.GetDependency<PlayerInput>();
+        _playerInput.OnJumpTriggered += Jump;
+    }
+
+    private void OnEnable()
     {
         _rigidbody = GetComponent<Rigidbody>();
         
-        _playerInput.OnJumpTriggered += Jump;
-
         StartCoroutine(DropPlayerOnGround());
         
         IEnumerator DropPlayerOnGround()
@@ -52,6 +55,11 @@ public class PlayerMovementController : SerializedMonoBehaviour
     private void Update()
     {
         UpdateMouseLook();
+
+        if (_isOnGround)
+        {
+            
+        }
     }
 
     private void Move()
@@ -136,6 +144,9 @@ public class PlayerMovementController : SerializedMonoBehaviour
 
     private void OnDestroy()
     {
-        _playerInput.OnJumpTriggered -= Jump;
+        if (_playerInput is not null)
+        {
+            _playerInput.OnJumpTriggered -= Jump;
+        } 
     }
 }
