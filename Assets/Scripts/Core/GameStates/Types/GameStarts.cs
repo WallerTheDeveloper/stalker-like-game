@@ -14,8 +14,6 @@ namespace Core.GameStates.Types
 
         private IDependencyContainer _dependencyContainer;
         public override Action TriggerStateSwitch { get; set; }
-        public override bool IsInitialized { get; set; }
-
         public override IEnumerator Initialize(IDependencyContainer container)
         {
             _dependencyContainer = container;
@@ -29,8 +27,6 @@ namespace Core.GameStates.Types
             PlayerMovementController playerMovementController = Instantiate(_playerMovementController);
             RegisterDependenciesFor(playerMovementController);
 
-            IsInitialized = true;
-            
             TriggerStateSwitch?.Invoke();
         }
 
@@ -38,9 +34,7 @@ namespace Core.GameStates.Types
         {}
 
         public override void Stop()
-        {
-            IsInitialized = false;
-        }
+        {}
         
         private void RegisterDependenciesFor(PlayerMovementController playerMovementController)
         {

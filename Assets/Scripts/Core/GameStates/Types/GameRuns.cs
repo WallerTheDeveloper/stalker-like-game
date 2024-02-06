@@ -11,8 +11,6 @@ namespace Core.GameStates.Types
         private IDependency _playerInput;
 
         public override Action TriggerStateSwitch { get; set; }
-        public override bool IsInitialized { get; set; }
-
         protected override IDependencyProvider DependencyProvider { get; set; }
 
         public override IEnumerator Initialize(IDependencyContainer container)
@@ -22,8 +20,6 @@ namespace Core.GameStates.Types
             
             _playerInput ??= DependencyProvider.GetDependency<PlayerInput>();
             
-            IsInitialized = true;
-
             yield break;
         }
 
