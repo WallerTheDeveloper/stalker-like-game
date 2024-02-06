@@ -7,10 +7,6 @@ namespace Core.DISystem
         void Register<TDependent>(TDependent dependent, List<IDependency> linkedDependencies)
             where TDependent : IDependentObject;
         void Deregister<T>(IDependency dependency, List<IDependency> linkedDependencies);
-        
-        // TODO: Move to another interface - IDependencyProvider?
-        T GetDependency<T>();
-        
         void Tick(IDependency dependency);
         
         // void TickAll();

@@ -21,9 +21,9 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
     private bool _isOnGround = false;
     private float xRotation = 0f;
 
-    public void InjectDependencies(IDependencyContainer dependencyContainer)
+    public void InjectDependencies(IDependencyProvider provider)
     {
-        _playerInput ??= dependencyContainer.GetDependency<PlayerInput>();
+        _playerInput ??= provider.GetDependency<PlayerInput>();
         _playerInput.OnJumpTriggered += Jump;
     }
 

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Core.DISystem
 {
-    public class DependencyContainer : IDependencyContainer
+    public class DependencyContainer : IDependencyContainer, IDependencyProvider
     {
         private readonly Dictionary<Type, List<IDependency>> _dependentObjectLinks = new();
         

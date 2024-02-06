@@ -10,6 +10,7 @@ namespace Core.GameStates
         public abstract Action TriggerStateSwitch { get; set; }
         public abstract bool IsInitialized { get; set; }
         public abstract IEnumerator Initialize(IDependencyContainer container);
+        protected virtual IDependencyProvider DependencyProvider { get; set; }
         public abstract void TickState();
         public abstract void Stop();
     }
