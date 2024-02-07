@@ -14,16 +14,10 @@ namespace Core.GameStates.Types
 
         private IDependencyContainer _dependencyContainer;
         public override Action TriggerStateSwitch { get; set; }
-        public override IEnumerator Initialize(IDependencyContainer container)
+        public override void Initialize(IDependencyContainer container)
         {
             _dependencyContainer = container;
-            
-            // TODO: Implement game scene manager
-            while (SceneManager.GetActiveScene().name != "Main")
-            {
-                yield return null;
-            }
-            
+
             PlayerMovementController playerMovementController = Instantiate(_playerMovementController);
             RegisterDependenciesFor(playerMovementController);
 

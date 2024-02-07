@@ -8,7 +8,7 @@ namespace Core.GameStates
     public abstract class GameState : MonoBehaviour
     { 
         public abstract Action TriggerStateSwitch { get; set; }
-        public abstract IEnumerator Initialize(IDependencyContainer container);
+        public abstract void Initialize(IDependencyContainer container);
         protected virtual IDependencyProvider DependencyProvider { get; set; }
         public abstract void TickState();
         public abstract void Stop();

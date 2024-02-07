@@ -1,30 +1,30 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Core.DISystem;
 using Core.GameStates.Types;
+using Core.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Scene = Core.SceneManagement.Scene;
 
 namespace Core.GameStates
 {
-    public class GameStatesManager : MonoSingleton<GameStatesManager>
+    public class GameStatesManager : MonoSingleton<GameStatesManager>, ISystem
     {
         [SerializeField] private GameStarts _gameStarts;
         [SerializeField] private GameRuns _gameRuns;
         
         private HashSet<GameState> _gameStates;
-
         private Queue<GameState> _pendingStates;
         
         private GameState _currentState;
         
         private IDependencyContainer _dependencyContainer;
 
-        private Coroutine _currentInitProcess;
-        private void Awake()
+        private GameSceneManager _sceneManager;
+        
+        public void Run()
         {
             _dependencyContainer = new DependencyContainer();
+            
             
             _gameStates = new HashSet<GameState>
             {
@@ -45,12 +45,10 @@ namespace Core.GameStates
 
             _currentState.TriggerStateSwitch += SwitchState;
 
-            DontDestroyOnLoad(this.gameObject);
-            SceneManager.LoadScene("Main");
-
-            _currentInitProcess = StartCoroutine(_currentState.Initialize(_dependencyContainer));
+            _sceneManager = GameSceneManager.Instance;
+            _sceneManager.TriggerSceneChange(Scene.Cordon, () => _currentState.Initialize(_dependencyContainer));
         }
-
+        
         private void SwitchState()
         {
             _currentState.Stop();
@@ -67,15 +65,12 @@ namespace Core.GameStates
 
             _currentState.TriggerStateSwitch += SwitchState;
 
-            StopCoroutine(_currentInitProcess);
-            _currentInitProcess = StartCoroutine(_currentState.Initialize(_dependencyContainer));
+            _currentState.Initialize(_dependencyContainer);
         }
     
         private void Update()
         {
-            
             _currentState.TickState();
         }
-        
     }
 }

@@ -13,14 +13,12 @@ namespace Core.GameStates.Types
         public override Action TriggerStateSwitch { get; set; }
         protected override IDependencyProvider DependencyProvider { get; set; }
 
-        public override IEnumerator Initialize(IDependencyContainer container)
+        public override void Initialize(IDependencyContainer container)
         {
             _dependencyContainer = container;
             DependencyProvider = (IDependencyProvider) container;
             
             _playerInput ??= DependencyProvider.GetDependency<PlayerInput>();
-            
-            yield break;
         }
 
         public override void TickState()
