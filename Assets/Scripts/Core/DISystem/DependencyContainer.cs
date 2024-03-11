@@ -18,6 +18,8 @@ namespace Core.DISystem
             linkedDependencies.ForEach(dependency => dependency.Initialize());
             
             dependent.InjectDependencies(this);
+            
+            dependent.PostInjectionConstruct();
         }
         
         // from https://english.stackexchange.com/questions/25931/unregister-vs-deregister
