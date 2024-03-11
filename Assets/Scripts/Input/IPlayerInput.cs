@@ -7,8 +7,13 @@ namespace Input
 {
     public interface IPlayerInput : IDependency
     {
-        Action OnJumpTriggered { get; set; }
         Vector2 MovementInputValue { get; }
         Vector2 LookInputValue { get; }
+        Action<bool> OnCrouchPerformedTriggered { get; set; }
+        Action<bool> OnSprintPerformedTriggered { get; set; }
+        Action<bool> OnJumpPerformedTriggered { get; set; }
+        Action<bool> OnCrouchCanceledTriggered { get; set; }
+        Action<bool> OnSprintCanceledTriggered { get; set; }
+        Action<bool> OnJumpCanceledTriggered { get; set; }
     }
 }

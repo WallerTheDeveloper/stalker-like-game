@@ -8,47 +8,91 @@ namespace Input
 {
     public class PlayerInput : IPlayerInput
     {
-        private PlayerInputActions _playerActions;
+        private Controls controls = null;
+        public Vector2 MovementInputValue => moveInput;
+        public Vector2 LookInputValue => mouseInput;
         
-        public Vector2 MovementInputValue => _movementInputValue;
-        public Vector2 LookInputValue => _lookInputValue;
-        
-        private Vector2 _movementInputValue = Vector2.zero;
-        private Vector2 _lookInputValue;
-        
-        public Action OnJumpTriggered { get; set; }
-        
-        private bool _isJumping = false;
+        public Action<bool> OnCrouchPerformedTriggered { get; set; }
+        public Action<bool> OnSprintPerformedTriggered { get; set; }
+        public Action<bool> OnJumpPerformedTriggered { get; set; }
+        public Action<bool> OnCrouchCanceledTriggered { get; set; }
+        public Action<bool> OnSprintCanceledTriggered { get; set; }
+        public Action<bool> OnJumpCanceledTriggered { get; set; }
+
+        private Vector2 moveInput = Vector2.zero, mouseInput = Vector2.zero;
+
         public void Initialize()
         {
-            _playerActions = new PlayerInputActions();
+            controls = new Controls();
 
-            _playerActions.Gameplay.Jump.performed += OnJump;
-            
-            _playerActions.Gameplay.Control.Enable();
-            _playerActions.Gameplay.Jump.Enable();
-            _playerActions.Gameplay.Look.Enable();
+            controls.Gameplay.Movement.performed += OnMovementPerformed;
+            controls.Gameplay.Movement.canceled += OnMovementCanceled;
 
+            controls.Gameplay.Mouse.performed += OnLookPerformed;
+            controls.Gameplay.Mouse.canceled += OnLookCanceled;
+
+            controls.Gameplay.Jump.performed += OnJumpPerformed;
+            controls.Gameplay.Jump.canceled += OnJumpCanceled;
+
+            controls.Gameplay.Crouch.performed += OnCrouchPerformed;
+            controls.Gameplay.Crouch.canceled += OnCrouchCanceled;
+
+            controls.Gameplay.Sprint.performed += OnSprintPerformed;
+            controls.Gameplay.Sprint.canceled += OnSprintCanceled;
+
+            controls.Enable();
+        }
+        
+        private void OnMovementPerformed(InputAction.CallbackContext obj)
+        {
+            moveInput = obj.ReadValue<Vector2>();
+        }
+        
+        private void OnMovementCanceled(InputAction.CallbackContext obj)
+        {
+            moveInput = Vector2.zero;
         }
 
+        private void OnLookPerformed(InputAction.CallbackContext obj)
+        {
+            mouseInput = controls.Gameplay.Mouse.ReadValue<Vector2>();
+        }
+        private void OnLookCanceled(InputAction.CallbackContext obj)
+        {
+            mouseInput = Vector2.zero;
+        }
+        private void OnJumpPerformed(InputAction.CallbackContext obj)
+        {
+            OnJumpPerformedTriggered?.Invoke(true);
+        }
+        private void OnJumpCanceled(InputAction.CallbackContext obj)
+        {
+            OnJumpCanceledTriggered?.Invoke(false);
+        }
+        private void OnCrouchPerformed(InputAction.CallbackContext obj)
+        {
+            OnCrouchPerformedTriggered?.Invoke(true);   
+        }
+        private void OnCrouchCanceled(InputAction.CallbackContext obj)
+        {
+            OnCrouchCanceledTriggered?.Invoke(false);
+        }
+        private void OnSprintPerformed(InputAction.CallbackContext obj)
+        {
+            OnSprintPerformedTriggered?.Invoke(true);
+        }
+        private void OnSprintCanceled(InputAction.CallbackContext obj)
+        {
+            OnSprintCanceledTriggered?.Invoke(false);
+        }
         public void Deinitialize()
         {
-            _playerActions.Gameplay.Jump.performed -= OnJump;     
-
-            _playerActions.Gameplay.Control.Disable();
-            _playerActions.Gameplay.Jump.Disable();
-            _playerActions.Gameplay.Look.Disable();
+            controls.Disable();
         }
-        
         public void Tick()
         {
-            _movementInputValue = _playerActions.Gameplay.Control.ReadValue<Vector2>();
-            _lookInputValue = _playerActions.Gameplay.Look.ReadValue<Vector2>();
-        }
-        
-        private void OnJump(InputAction.CallbackContext obj)
-        {
-            OnJumpTriggered?.Invoke();
+            // _movementInputValue = _playerActions.Gameplay.Control.ReadValue<Vector2>();
+            // _lookInputValue = _playerActions.Gameplay.Look.ReadValue<Vector2>();
         }
     }
 }
