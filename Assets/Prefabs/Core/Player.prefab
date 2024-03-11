@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &723603876083949154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6385180902033625937}
+  m_Layer: 0
+  m_Name: Orientation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6385180902033625937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723603876083949154}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.2, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3350996379994593622}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1760665001626430846
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +64,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1538688546298617181}
+  - {fileID: 6385180902033625937}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7349582230386543469
@@ -43,7 +75,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760665001626430846}
   serializedVersion: 4
-  m_Mass: 100
+  m_Mass: 1
   m_Drag: 6
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -74,12 +106,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38c0cf1ef9cbe0468b3e11da671cf06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  jumpForce: 1000
-  fallForce: 100
+  hasControl: 1
+  moveSpeed: 500
+  moveMultiplier: 9
+  groundMaxSpeed: 20
+  friction: 230
+  maxSlope: 15
+  enableInAirDrag: 0
+  inAirMaxSpeed: 30
+  inAirMovementModifier: 0.8
+  inAirDrag: 160
+  enableSprint: 1
+  sprintMultiplier: 12
+  sprintMaxSpeedModifier: 5
+  slopeRaycastDistance: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  enableJump: 1
+  autoJump: 1
+  jumpForce: 10
+  jumpMultiplier: 1.5
+  enableCrouch: 1
+  crouchMoveMultiplier: 0.5
+  crouchMaxSpeed: 10
+  crouchJumpMultiplier: 1.4
+  crouchScale: {x: 1, y: 0.5, z: 1}
+  enableSlide: 1
+  debugSlideTrajectory: 0
+  slideForce: 25
+  slideFriction: 3
+  slideCooldown: 1
+  slideSpeedThreshold: 5
+  slideStopThreshold: 2.4
+  enableMouseLook: 1
+  playerCamera: {fileID: 1538688546298617181}
+  orientation: {fileID: 6385180902033625937}
+  sensitivity: {x: 20, y: 20}
+  sensMultiplier: 0.2
   maxAngle: 90
-  mouseSensitivity: {x: 0.2, y: 0.2}
-  firstPersonCamera: {fileID: 17586409664189770}
 --- !u!136 &8711322634267670086
 CapsuleCollider:
   m_ObjectHideFlags: 0
