@@ -61,7 +61,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1538688546298617181}
   - {fileID: 6385180902033625937}
@@ -76,7 +76,7 @@ Rigidbody:
   m_GameObject: {fileID: 1760665001626430846}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 6
+  m_Drag: 0.7
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -89,10 +89,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &8083670413245980789
 MonoBehaviour:
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasControl: 1
-  moveSpeed: 500
+  moveSpeed: 100
   moveMultiplier: 9
   groundMaxSpeed: 20
   friction: 230
@@ -122,10 +122,10 @@ MonoBehaviour:
   slopeRaycastDistance: 1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   enableJump: 1
   autoJump: 1
-  jumpForce: 10
+  jumpForce: 2
   jumpMultiplier: 1.5
   enableCrouch: 1
   crouchMoveMultiplier: 0.5
