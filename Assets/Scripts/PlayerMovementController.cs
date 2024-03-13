@@ -115,7 +115,9 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         private void ToggleCrouch(bool crouched) {
             if (!enableCrouch) return;
             
-            if (crouched) {
+            if (crouched)
+            {
+                enableSprint = false;
                 crouching = true;
                 transform.localScale = crouchScale;
                 transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
@@ -125,6 +127,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
             }
             else {
                 crouching = false;
+                enableSprint = true;
                 sliding = false;
                 transform.localScale = originalScale;
                 transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
