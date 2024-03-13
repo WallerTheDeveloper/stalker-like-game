@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Core.DISystem;
 using Input;
@@ -91,62 +92,45 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         {
             _playerInput.OnCrouchPerformedTriggered += ToggleCrouch;
             _playerInput.OnCrouchCanceledTriggered += ToggleCrouch;
-            void ToggleCrouch(bool crouched) {
-                if (!enableCrouch) return;
-            
-                if (crouched) {
-                    crouching = true;
-                    transform.localScale = crouchScale;
-                    transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
-            
-                    if (CanSlide()) Slide();
-                
-                    _playerInput.OnCrouchPerformedTriggered -= ToggleCrouch;
-                }
-                else {
-                    crouching = false;
-                    sliding = false;
-                    transform.localScale = originalScale;
-                    transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-                
-                    _playerInput.OnCrouchCanceledTriggered -= ToggleCrouch;
-                }
-            }
-            
+
             _playerInput.OnSprintPerformedTriggered += OnSprint;
             _playerInput.OnSprintCanceledTriggered += OnSprint;
-            void OnSprint(bool sprint)
-            {
-                sprinting = sprint;
             
-                if (sprint)
-                {
-                    _playerInput.OnSprintPerformedTriggered -= OnSprint;
-                }
-                else
-                {
-                    _playerInput.OnSprintCanceledTriggered -= OnSprint;
-                }
-            }
             
             _playerInput.OnJumpPerformedTriggered += OnJumpTrigger;
             _playerInput.OnJumpCanceledTriggered += OnJumpTrigger;
-            void OnJumpTrigger(bool jump)
-            {
-                jumping = jump;
-                OnJump();
-                
-                if (jump)
-                {
-                    _playerInput.OnJumpPerformedTriggered -= OnJumpTrigger;
-                }
-                else
-                {
-                    _playerInput.OnJumpCanceledTriggered -= OnJumpTrigger;
-                }
-            }
         }
 
+        private void OnJumpTrigger(bool jump)
+        {
+            jumping = jump;
+            OnJump();
+        }
+        
+        private void OnSprint(bool sprint)
+        {
+            sprinting = sprint;
+        }
+        
+        private void ToggleCrouch(bool crouched) {
+            if (!enableCrouch) return;
+            
+            if (crouched) {
+                crouching = true;
+                transform.localScale = crouchScale;
+                transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+            
+                if (CanSlide()) Slide();
+                
+            }
+            else {
+                crouching = false;
+                sliding = false;
+                transform.localScale = originalScale;
+                transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            }
+        }
+        
         private void OnEnable() {
             rb = GetComponent<Rigidbody>();
 
@@ -278,5 +262,18 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
 
         private void OnCollisionEnter(Collision other) {
             if (CanSlide()) Slide();
+        }
+
+        private void OnDestroy()
+        {
+            _playerInput.OnCrouchPerformedTriggered -= ToggleCrouch;
+            _playerInput.OnCrouchCanceledTriggered -= ToggleCrouch;
+
+            _playerInput.OnSprintPerformedTriggered -= OnSprint;
+            _playerInput.OnSprintCanceledTriggered -= OnSprint;
+            
+            
+            _playerInput.OnJumpPerformedTriggered -= OnJumpTrigger;
+            _playerInput.OnJumpCanceledTriggered -= OnJumpTrigger;
         }
 }
