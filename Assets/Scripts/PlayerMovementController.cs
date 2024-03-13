@@ -104,7 +104,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         private void OnJumpTrigger(bool jump)
         {
             jumping = jump;
-            OnJump();
+            Jump();
         }
         
         private void OnSprint(bool sprint)
@@ -168,7 +168,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
             Vector3 dir = orientation.right * _moveInput.x + orientation.forward * _moveInput.y;
             rb.AddForce(Vector3.down * Time.fixedDeltaTime * 10f);
 
-            if (autoJump && jumping && grounded) OnJump();
+            if (autoJump && jumping && grounded) Jump();
 
             if (crouching && grounded && currentSlope >= maxSlope) {
                 rb.AddForce(Vector3.down * Time.fixedDeltaTime * 5000f);
@@ -198,7 +198,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
             return velocity + dir * speed;
         }
 
-        private void OnJump() {
+        private void Jump() {
             if (!enableJump) return;
 
             if (grounded) {
