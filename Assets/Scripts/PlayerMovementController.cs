@@ -59,7 +59,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         [SerializeField] private float sensMultiplier = 0.2f;
         [SerializeField] private float maxAngle = 90f;
 
-        private Rigidbody rb = null;
+        private Rigidbody _rigidbody = null;
         
         private Vector3 originalScale = Vector3.zero;
 
@@ -68,7 +68,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         
         private float xRotation = 0f, currentSlope = 0f, timeSinceLastSlide = Mathf.Infinity;
         private bool grounded, jumping, crouching, sliding, sprinting;
-        private float curSpeed {
+        private float currentSpeed {
             get {
                 if (!enableSprint) return moveSpeed * moveMultiplier;
                 return moveSpeed * (sprinting ? sprintMultiplier : moveMultiplier);
@@ -132,7 +132,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         }
         
         private void OnEnable() {
-            rb = GetComponent<Rigidbody>();
+            _rigidbody = GetComponent<Rigidbody>();
 
             originalScale = transform.localScale;
             Cursor.lockState = CursorLockMode.Locked;
@@ -166,19 +166,19 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
             _moveInput = _playerInput.MovementInputValue;
 
             Vector3 dir = orientation.right * _moveInput.x + orientation.forward * _moveInput.y;
-            rb.AddForce(Vector3.down * Time.fixedDeltaTime * 10f);
+            _rigidbody.AddForce(Vector3.down * Time.fixedDeltaTime * 10f);
 
             if (autoJump && jumping && grounded) Jump();
 
             if (crouching && grounded && currentSlope >= maxSlope) {
-                rb.AddForce(Vector3.down * Time.fixedDeltaTime * 5000f);
+                _rigidbody.AddForce(Vector3.down * Time.fixedDeltaTime * 5000f);
                 return;
             }
 
             float multiplier = grounded && crouching ? crouchMoveMultiplier : 1f;
 
-            if (rb.velocity.magnitude > maxSpeed) dir = Vector3.zero;
-            rb.AddForce(GetMovementVector(-rb.velocity, dir.normalized, curSpeed * Time.fixedDeltaTime) * ((grounded && !jumping) ? multiplier : inAirMovementModifier));
+            if (_rigidbody.velocity.magnitude > maxSpeed) dir = Vector3.zero;
+            _rigidbody.AddForce(GetMovementVector(-_rigidbody.velocity, dir.normalized, currentSpeed * Time.fixedDeltaTime) * ((grounded && !jumping) ? multiplier : inAirMovementModifier));
         }
 
         private Vector3 GetMovementVector(Vector3 velocity, Vector3 dir, float speed) {
@@ -203,9 +203,9 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
 
             if (grounded) {
                 //If crouching and not sliding: crouch jump multiplier, if sliding: slide jump multiplier, and if all else is false: normal jump multiplier.
-                float slideJumpMultiplier = rb.velocity.y < 0 ? rb.velocity.magnitude * 0.1f + jumpMultiplier : crouchJumpMultiplier; //scales to speed
+                float slideJumpMultiplier = _rigidbody.velocity.y < 0 ? _rigidbody.velocity.magnitude * 0.1f + jumpMultiplier : crouchJumpMultiplier; //scales to speed
                 float currentMultiplier = crouching && currentSlope < maxSlope ? crouchJumpMultiplier : crouching && currentSlope >= maxSlope ? slideJumpMultiplier : jumpMultiplier;
-                rb.AddForce(Vector2.up * jumpForce * currentMultiplier, ForceMode.Impulse);
+                _rigidbody.AddForce(Vector2.up * jumpForce * currentMultiplier, ForceMode.Impulse);
                 grounded = false;
             }
         }
@@ -228,17 +228,17 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         private void Slide() {
             if (!enableSlide) return;
 
-            rb.AddForce(orientation.forward * slideForce, ForceMode.Impulse);
+            _rigidbody.AddForce(orientation.forward * slideForce, ForceMode.Impulse);
 
             sliding = true;
             timeSinceLastSlide = 0f;
 
-            StartCoroutine(StopProjectedSlide(rb.velocity));
+            StartCoroutine(StopProjectedSlide(_rigidbody.velocity));
         }
 
         private IEnumerator StopProjectedSlide(Vector3 momentum)
         {
-            Vector3 velocity = momentum / rb.mass; //find velocity after slide
+            Vector3 velocity = momentum / _rigidbody.mass; //find velocity after slide
             Vector3 finalPos = transform.position + velocity; //estimated final position
             float distToPos = Vector3.Distance(transform.position, finalPos); //distance between final position and current position
 
@@ -257,7 +257,7 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
         }
 
         private bool CanSlide() {
-            return rb.velocity.magnitude > slideSpeedThreshold && grounded && crouching && !sliding && timeSinceLastSlide >= slideCooldown && currentSlope < maxSlope;
+            return _rigidbody.velocity.magnitude > slideSpeedThreshold && grounded && crouching && !sliding && timeSinceLastSlide >= slideCooldown && currentSlope < maxSlope;
         }
 
         private void OnCollisionEnter(Collision other) {
