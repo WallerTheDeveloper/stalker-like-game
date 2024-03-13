@@ -107,18 +107,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasControl: 1
-  moveSpeed: 100
+  moveSpeed: 250
   moveMultiplier: 9
   groundMaxSpeed: 20
   friction: 230
   maxSlope: 15
   enableInAirDrag: 0
-  inAirMaxSpeed: 30
+  inAirMaxSpeed: 8
   inAirMovementModifier: 0.8
   inAirDrag: 160
   enableSprint: 1
-  sprintMultiplier: 12
-  sprintMaxSpeedModifier: 5
+  sprintMultiplier: 13
+  sprintMaxSpeedModifier: 25
   slopeRaycastDistance: 1
   groundLayer:
     serializedVersion: 2
@@ -126,13 +126,13 @@ MonoBehaviour:
   enableJump: 1
   autoJump: 1
   jumpForce: 2
-  jumpMultiplier: 1.5
+  jumpMultiplier: 1.2
   enableCrouch: 1
   crouchMoveMultiplier: 0.5
   crouchMaxSpeed: 10
   crouchJumpMultiplier: 1.4
   crouchScale: {x: 1, y: 0.5, z: 1}
-  enableSlide: 1
+  enableSlide: 0
   debugSlideTrajectory: 0
   slideForce: 25
   slideFriction: 3
