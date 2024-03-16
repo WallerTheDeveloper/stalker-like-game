@@ -1,12 +1,13 @@
-using System;
 using System.Collections;
 using Core.DISystem;
 using Input;
 using UnityEngine;
 
-public class PlayerMovementController : MonoBehaviour, IDependentObject
+namespace Control
 {
-    [Header("Movement Settings")]
+    public class PlayerMovementController : MonoBehaviour, IDependentObject
+    {
+        [Header("Movement Settings")]
         [SerializeField] private bool hasControl = true;
         [SerializeField] private float moveSpeed = 500f;
         [SerializeField] private float moveMultiplier = 9f;
@@ -279,4 +280,5 @@ public class PlayerMovementController : MonoBehaviour, IDependentObject
             _playerInput.OnJumpPerformedTriggered -= OnJumpTrigger;
             _playerInput.OnJumpCanceledTriggered -= OnJumpTrigger;
         }
+    }
 }
