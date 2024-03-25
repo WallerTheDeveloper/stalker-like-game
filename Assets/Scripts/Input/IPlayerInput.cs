@@ -15,5 +15,9 @@ namespace Input
         Action<bool> OnCrouchCanceledTriggered { get; set; }
         Action<bool> OnSprintCanceledTriggered { get; set; }
         Action<bool> OnJumpCanceledTriggered { get; set; }
+        Action<bool> OnShootStartedTriggered { get; set; }
+        Action<bool> OnShootCanceledTriggered { get; set; }
+        Action OnAimPerformedTriggered { get; set; }
+        Action OnAimCanceledTriggered { get; set; }
     }
 }

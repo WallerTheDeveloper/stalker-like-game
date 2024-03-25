@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using Control;
-using Core.DISystem;
 using Input;
 using UnityEngine;
 using Random = System.Random;
@@ -17,20 +14,34 @@ namespace Shooting
         [Range(0f, 5f)]
         [SerializeField] private float _dispersion;
         [SerializeField] private float _bulletVelocity = 70f;
+        [SerializeField] private float _roundsPerMinute = 6000f;
         
         private GameObject _projectile;
         
         private float _initialVelocity;
-        
+        private float _timeSinceLastShot = 0f;
+        private bool _isShooting;
+        private float _fireDelay;
+        private float _nextShoot;
+
         private void Start()
         {
             IPlayerInput playerInput =
                 gameObject.GetComponentInParent<PlayerMovementController>()._playerInput;
             
-            playerInput.OnShootPerformedTriggered += OnShootPerformed;
+            playerInput.OnShootStartedTriggered += OnShootStateHandle;
+            playerInput.OnShootCanceledTriggered += OnShootStateHandle;
+            
+            
+            _fireDelay = 60.0f / _roundsPerMinute;
+        }
+        
+        private void OnShootStateHandle(bool isShooting)
+        {
+            _isShooting = isShooting;
         }
 
-        private void OnShootPerformed()
+        private void PerformShooting()
         {
             _projectile = Instantiate(_bulletPrefab, _shootingPoint.transform.position, _shootingPoint.transform.rotation);
             Rigidbody projectileRigidbody = _projectile.GetComponent<Rigidbody>();
@@ -41,6 +52,14 @@ namespace Shooting
             float randomY = (float) random.NextDouble() * _dispersion;
             
             projectileRigidbody.AddForce(new Vector3(randomX, randomY, 0) + _firstPersonCamera.transform.forward * _bulletVelocity, ForceMode.Impulse);
+        }
+        private void Update()
+        {
+            if (_isShooting && Time.time > _nextShoot)
+            {
+                PerformShooting();
+                _nextShoot = Time.time + _fireDelay;
+            }
         }
     }
 }

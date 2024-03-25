@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMovementController: {fileID: 8083670413245980789, guid: e1f8aef9556ad004eaaaf81f5cf3f216, type: 3}
+  _weapon: {fileID: 7504669667024758598, guid: c66e330a9f7b31e41b80fa8bef4cfe19, type: 3}

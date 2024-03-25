@@ -18,6 +18,10 @@ namespace Input
         public Action<bool> OnCrouchCanceledTriggered { get; set; }
         public Action<bool> OnSprintCanceledTriggered { get; set; }
         public Action<bool> OnJumpCanceledTriggered { get; set; }
+        public Action<bool> OnShootStartedTriggered { get; set; }
+        public Action<bool> OnShootCanceledTriggered { get; set; }
+        public Action OnAimPerformedTriggered { get; set; }
+        public Action OnAimCanceledTriggered { get; set; }
 
         private Vector2 moveInput = Vector2.zero, mouseInput = Vector2.zero;
 
@@ -39,10 +43,16 @@ namespace Input
 
             controls.Gameplay.Sprint.performed += OnSprintPerformed;
             controls.Gameplay.Sprint.canceled += OnSprintCanceled;
-
+            
+            controls.Combat.Shoot.started += OnShootStarted;
+            controls.Combat.Shoot.canceled += OnShootCanceled;
+            
+            controls.Combat.Aim.performed += OnAimPerformed;
+            controls.Combat.Aim.canceled += OnAimCanceled;
+            
             controls.Enable();
         }
-        
+
         private void OnMovementPerformed(InputAction.CallbackContext obj)
         {
             moveInput = obj.ReadValue<Vector2>();
@@ -84,6 +94,23 @@ namespace Input
         private void OnSprintCanceled(InputAction.CallbackContext obj)
         {
             OnSprintCanceledTriggered?.Invoke(false);
+        }
+
+        private void OnShootStarted(InputAction.CallbackContext obj)
+        {
+            OnShootStartedTriggered?.Invoke(true);
+        }
+        private void OnShootCanceled(InputAction.CallbackContext obj)
+        {
+            OnShootCanceledTriggered?.Invoke(false);
+        }
+        private void OnAimPerformed(InputAction.CallbackContext obj)
+        {
+            OnAimPerformedTriggered?.Invoke();
+        }
+        private void OnAimCanceled(InputAction.CallbackContext obj)
+        {
+            OnAimCanceledTriggered?.Invoke();
         }
         public void Deinitialize()
         {

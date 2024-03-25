@@ -83,7 +83,7 @@ namespace Control
             }
         }
 
-        private IPlayerInput _playerInput;
+        public IPlayerInput _playerInput;
         public void InjectDependencies(IDependencyProvider provider)
         {
             _playerInput ??= provider.GetDependency<PlayerInput>();
