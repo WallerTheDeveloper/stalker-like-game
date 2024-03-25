@@ -15,6 +15,7 @@ namespace Shooting
         [SerializeField] private float _dispersion;
         [SerializeField] private float _bulletVelocity = 70f;
         [SerializeField] private float _roundsPerMinute = 6000f;
+        [SerializeField] private int _magazineSize = 30;
         
         private GameObject _projectile;
         
@@ -43,18 +44,25 @@ namespace Shooting
 
         private void PerformShooting()
         {
-            _projectile = Instantiate(_bulletPrefab, _shootingPoint.transform.position, _shootingPoint.transform.rotation);
-            Rigidbody projectileRigidbody = _projectile.GetComponent<Rigidbody>();
-            
             // generate random values for dispersion
             Random random = new Random();
             float randomX = (float) random.NextDouble() * _dispersion;
             float randomY = (float) random.NextDouble() * _dispersion;
             
+            _projectile = Instantiate(_bulletPrefab, _shootingPoint.transform.position, _shootingPoint.transform.rotation);
+            Rigidbody projectileRigidbody = _projectile.GetComponent<Rigidbody>();
+
             projectileRigidbody.AddForce(new Vector3(randomX, randomY, 0) + _firstPersonCamera.transform.forward * _bulletVelocity, ForceMode.Impulse);
+            _magazineSize--;
         }
         private void Update()
         {
+            if (_magazineSize == 0)
+            {
+                Debug.Log("Out of ammo");
+                return;
+            }
+            
             if (_isShooting && Time.time > _nextShoot)
             {
                 PerformShooting();
