@@ -29,11 +29,16 @@ namespace Shooting
             
             playerInput.OnShootStartedTriggered += OnShootStateHandle;
             playerInput.OnShootCanceledTriggered += OnShootStateHandle;
-            
+            playerInput.OnReloadStartedTriggered += Reload;
             
             _fireDelay = 60.0f / _roundsPerMinute;
         }
-        
+
+        private void Reload()
+        {
+            _magazineSize = 30;
+        }
+
         private void OnShootStateHandle(bool isShooting)
         {
             _isShooting = isShooting;
