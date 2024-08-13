@@ -22,6 +22,8 @@ namespace Input
         public Action<bool> OnShootCanceledTriggered { get; set; }
         public Action OnAimPerformedTriggered { get; set; }
         public Action OnAimCanceledTriggered { get; set; }
+        public Action OnReloadStartedTriggered { get; set; }
+
 
         private Vector2 moveInput = Vector2.zero, mouseInput = Vector2.zero;
 
@@ -50,6 +52,8 @@ namespace Input
             controls.Combat.Aim.performed += OnAimPerformed;
             controls.Combat.Aim.canceled += OnAimCanceled;
             
+            controls.Combat.Reload.started += OnReloadStarted;
+
             controls.Enable();
         }
 
@@ -111,6 +115,10 @@ namespace Input
         private void OnAimCanceled(InputAction.CallbackContext obj)
         {
             OnAimCanceledTriggered?.Invoke();
+        }
+        private void OnReloadStarted(InputAction.CallbackContext obj)
+        {
+            OnReloadStartedTriggered?.Invoke();
         }
         public void Deinitialize()
         {

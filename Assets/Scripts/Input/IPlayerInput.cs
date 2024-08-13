@@ -19,5 +19,6 @@ namespace Input
         Action<bool> OnShootCanceledTriggered { get; set; }
         Action OnAimPerformedTriggered { get; set; }
         Action OnAimCanceledTriggered { get; set; }
+        Action OnReloadStartedTriggered { get; set; }
     }
 }
