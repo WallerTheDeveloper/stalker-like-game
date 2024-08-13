@@ -16,15 +16,12 @@ namespace Shooting
         [SerializeField] private float _bulletVelocity = 70f;
         [SerializeField] private float _roundsPerMinute = 6000f;
         [SerializeField] private int _magazineSize = 30;
-        
         private GameObject _projectile;
         
         private float _initialVelocity;
-        private float _timeSinceLastShot = 0f;
-        private bool _isShooting;
+        public bool _isShooting;
         private float _fireDelay;
         private float _nextShoot;
-
         private void Start()
         {
             IPlayerInput playerInput =
