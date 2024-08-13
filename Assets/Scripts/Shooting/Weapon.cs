@@ -45,7 +45,7 @@ namespace Shooting
         private void PerformShooting()
         {
             // generate random values for dispersion
-            Random random = new Random();
+            System.Random random = new Random();
             float randomX = (float) random.NextDouble() * _dispersion;
             float randomY = (float) random.NextDouble() * _dispersion;
             
