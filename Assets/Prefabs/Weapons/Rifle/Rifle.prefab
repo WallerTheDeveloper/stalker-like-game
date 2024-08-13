@@ -52,7 +52,6 @@ MonoBehaviour:
   _bulletVelocity: 200
   _roundsPerMinute: 600
   _magazineSize: 30
-  _recoilData: {fileID: 11400000, guid: 0bef002dd92002644bc7e88e8109a1c1, type: 2}
   _isShooting: 0
 --- !u!1 &7255045567680079668
 GameObject:
