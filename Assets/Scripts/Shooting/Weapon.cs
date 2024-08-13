@@ -51,7 +51,7 @@ namespace Shooting
             float randomX = (float) random.NextDouble() * _dispersion;
             float randomY = (float) random.NextDouble() * _dispersion;
             
-            _projectile = Instantiate(_bulletPrefab, _shootingPoint.transform.position, _shootingPoint.transform.rotation);
+            _projectile = Instantiate(_bulletPrefab, _shootingPoint.transform.position, _shootingPoint.transform.rotation * Quaternion.Euler(0, -90f, 0));
             Rigidbody projectileRigidbody = _projectile.GetComponent<Rigidbody>();
 
             projectileRigidbody.AddForce(new Vector3(randomX, randomY, 0) + _firstPersonCamera.transform.forward * _bulletVelocity, ForceMode.Impulse);
